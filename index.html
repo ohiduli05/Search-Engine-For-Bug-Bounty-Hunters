@@ -276,6 +276,8 @@
                 case 64 :
                     searchQuery += ' "sql" "parent" intitle:index.of -injection'
                     break
+                case 65:
+                    searchQuery += ' intitle:php?id=';
                 default:
                     alert('Invalid option.');
                     return;
@@ -452,6 +454,9 @@
             <button class="fsbutton" onclick="googleSearch(64)">SQL databases</button>
         </div>
     </div>
+       <div class="col-md-3">
+            <button class="fsbutton" onclick="googleSearch(65)">Directory listing vulnerabilities</button>
+        </div>
          <h4 class="text-center text-bg-success p-3">MD OHIDUL ISLAM</h4>
    </div>
 
