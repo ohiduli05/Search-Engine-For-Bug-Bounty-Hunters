@@ -1,124 +1,460 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bug Bounty Dorking Engine</title>
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-    crossorigin="anonymous"
-  />
-  <style>
-    body { background: #f8f9fa; }
-    .header { background: linear-gradient(90deg, #343a40, #6c757d); color: #fff; }
-    .dork-btn { transition: transform 0.2s, box-shadow 0.2s; }
-    .dork-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 15px rgba(0,0,0,0.2); }
-    #target { max-width: 400px; }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CyberDork Engine - Advanced Bug Bounty Recon</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon"> <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+        crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --primary-bg: #1a1d24; /* Darker blue-charcoal */
+            --secondary-bg: #23272f; /* Slightly lighter charcoal for cards/sections */
+            --accent-color: #00aeff; /* Vibrant Electric Blue */
+            --accent-hover: #007fbf; /* Darker blue for hover */
+            --text-color: #e0e0e0; /* Light grey for text */
+            --text-muted-color: #a0a0a0; /* Muted grey for descriptions */
+            --border-color: #343a45;
+            --success-color: #28a745;
+            --toast-bg: #2c3e50;
+            --toast-header-bg: #34495e;
+            --toast-text-color: #ecf0f1;
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--accent-color), #005f80);
+            color: #fff;
+            padding: 3rem 1rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 6px 20px rgba(0, 174, 255, 0.3);
+            text-align: center;
+        }
+        .header h1 {
+            font-weight: 700;
+            font-size: 3rem;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+        }
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .target-input-container {
+            background-color: var(--secondary-bg);
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            margin-bottom: 2.5rem;
+        }
+        .target-input-container .input-group-text {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: #fff;
+            font-size: 1.2rem;
+        }
+        .target-input-container input.form-control {
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            font-size: 1.1rem;
+            padding: 0.75rem 1rem;
+        }
+        .target-input-container input.form-control::placeholder {
+            color: var(--text-muted-color);
+        }
+        .target-input-container input.form-control:focus {
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 0.25rem rgba(0, 174, 255, 0.25);
+        }
+
+        .dork-category {
+            margin-bottom: 3rem;
+            background-color: var(--secondary-bg);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .dork-category h3 {
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--accent-color);
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .dork-item {
+            background-color: var(--primary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.375rem; /* Bootstrap's default for btn */
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+        }
+        .dork-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 174, 255, 0.2);
+        }
+
+        .dork-label {
+            font-weight: 500;
+            font-size: 1rem;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+        .dork-description {
+            font-size: 0.8rem;
+            color: var(--text-muted-color);
+            margin-bottom: 0.75rem;
+            flex-grow: 1; /* Pushes buttons to the bottom */
+        }
+        .engine-icon {
+            font-size: 0.85rem;
+            color: var(--text-muted-color);
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+        .engine-icon .fab {
+            margin-right: 5px;
+            color: var(--accent-color);
+        }
+
+        .dork-actions .btn {
+            font-size: 0.85rem;
+            padding: 0.4rem 0.8rem;
+        }
+        .btn-open-dork {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: #fff;
+        }
+        .btn-open-dork:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+        }
+        .btn-copy-dork {
+            background-color: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+        }
+        .btn-copy-dork:hover {
+            background-color: var(--accent-color);
+            color: #fff;
+        }
+
+        .footer {
+            background-color: var(--secondary-bg);
+            color: var(--text-muted-color);
+            padding: 2rem 0;
+            margin-top: 3rem;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+        .footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+            color: var(--accent-hover);
+        }
+
+        .toast-container {
+            z-index: 1090;
+        }
+        .toast {
+            background-color: var(--toast-bg);
+            color: var(--toast-text-color);
+            border-radius: 0.375rem;
+        }
+        .toast-header {
+            background-color: var(--toast-header-bg);
+            color: var(--toast-text-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .toast-header .btn-close {
+            filter: invert(1) grayscale(100%) brightness(200%);
+        }
+        .google-dork-note {
+            font-size: 0.75rem;
+            color: var(--text-muted-color);
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-  <header class="header py-4 text-center">
-    <h1 class="fw-bold">Bug Bounty Dorking Engine</h1>
-    <p class="lead">Streamlined Google & GitHub dorks for recon and vuln discovery</p>
-  </header>
+    <header class="header">
+        <h1 class="fw-bold">CyberDork Engine</h1>
+        <p class="lead">Unleash Advanced Reconnaissance for Bug Bounty Hunting</p>
+    </header>
 
-  <main class="container my-5">
-    <div class="d-flex justify-content-center mb-4">
-      <input
-        type="text"
-        id="target"
-        class="form-control text-center"
-        placeholder="Enter target domain, keyword, or GitHub org..."
-      />
+    <main class="container my-4">
+        <section class="target-input-container">
+            <div class="input-group input-group-lg">
+                <span class="input-group-text" id="target-addon"><i class="fas fa-crosshairs"></i></span>
+                <input
+                    type="text"
+                    id="target"
+                    class="form-control"
+                    placeholder="Target (e.g., example.com, company_name, API_KEY_TYPE)"
+                    aria-label="Target Input"
+                    aria-describedby="target-addon"
+                />
+            </div>
+        </section>
+
+        <div id="dork-categories-container">
+            </div>
+    </main>
+
+    <footer class="footer text-center">
+        <p class="mb-0">&copy; <span id="currentYear"></span> MD Ohidul Islam &middot; CyberDork Engine &middot;
+            <a href="https://github.com/yourusername/your-repo-name" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-github"></i> Contribute on GitHub
+            </a>
+        </p>
+    </footer>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="copyToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto"><i class="fas fa-check-circle text-success me-2"></i>Dork Copied!</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                The dork query is ready in your clipboard.
+            </div>
+        </div>
     </div>
-    <div class="row g-3">
-      <!-- Buttons will be injected here -->
-    </div>
-  </main>
 
-  <footer class="text-center py-3">
-    <small>&copy; 2025 MD Ohidul Islam · Bug Bounty Toolkit</small>
-  </footer>
-
-  <script>
-    // Define dork templates with engine: 'google' or 'github'
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
     const dorks = [
-      // Google-based dorks
-      { label: "Directory Listing", query: "intitle:index.of", engine: "google" },
-      { label: "Exposed Config Files", query: "ext:conf | ext:ini | ext:cfg", engine: "google" },
-      { label: "Database Dumps", query: "ext:sql | ext:dbf | ext:mdb", engine: "google" },
-      { label: "Backup Files", query: "ext:bak | ext:old | ext:backup", engine: "google" },
-      { label: "Login Pages", query: "inurl:login", engine: "google" },
-      { label: "SQL Errors", query: "intext:'sql syntax near' | intext:'incorrect syntax near'", engine: "google" },
-      { label: "Public Docs", query: "ext:pdf | ext:docx | ext:csv", engine: "google" },
-      { label: "phpinfo()", query: "intitle:phpinfo \"published by the PHP Group\"", engine: "google" },
-      { label: "WordPress Paths", query: "inurl:wp-content | inurl:plugins", engine: "google" },
-      { label: "Exposed .git", query: "inurl:.git", engine: "google" },
-      { label: "AWS S3 Buckets", query: "site:s3.amazonaws.com", engine: "google" },
-      { label: "Elasticsearch", query: "intitle:'Index of' 'elasticsearch'", engine: "google" },
-      { label: "Test Credentials", query: "inurl:'env' | inurl:'.env'", engine: "google" },
-      { label: "Error Logs", query: "ext:log", engine: "google" },
-      { label: "SSRF Endpoints", query: "inurl:'/api?url=' | inurl:'redirect='", engine: "google" },
-      { label: "Admin Panels", query: "inurl:admin | inurl:administrator", engine: "google" },
-      { label: "Backup Configs", query: "intitle:index.of backup", engine: "google" },
-      { label: "Subdomain Enumeration", query: "site:*.TARGET", engine: "google" },
-      { label: "Pastebin Leaks", query: "site:pastebin.com TARGET", engine: "google" },
-      { label: "Censys Search", query: "site:censys.io TARGET", engine: "google" },
-      // Advanced vectors
-      { label: "Local File Inclusion (LFI)", query: "inurl:?id= | inurl:?file=", engine: "google" },
-      { label: "Remote File Inclusion (RFI)", query: "inurl:include.php?file=", engine: "google" },
-      { label: "Cross-Site Scripting (XSS)", query: "inurl:?search= | inurl:?q=", engine: "google" },
-      { label: "Open Redirect", query: "inurl:redirect= | inurl:returnurl=", engine: "google" },
-      { label: "Apache .htpasswd", query: "intitle:\"Index of /\" \".htpasswd\"", engine: "google" },
-      { label: ".svn Directory", query: "inurl:.svn/entries", engine: "google" },
-      { label: "Jenkins Instances", query: "inurl:jenkins/login", engine: "google" },
-      { label: "FTP Directories", query: "intitle:\"Index of ftp\"", engine: "google" },
-      { label: "Exposed wp-config.php", query: "ext:php wp-config", engine: "google" },
-      { label: "PHP Session Files", query: "ext:sess_", engine: "google" },
-      // GitHub-specific dorks
-      { label: "GitHub .env Files", query: ".env filename:.env", engine: "github" },
-      { label: "GitHub AWS Keys", query: "AWS_ACCESS_KEY_ID", engine: "github" },
-      { label: "GitHub Private Keys", query: "-----BEGIN PRIVATE KEY-----", engine: "github" },
-      { label: "GitHub Heroku API Keys", query: "heroku.*api_key", engine: "github" },
-      { label: "GitHub OAuth Tokens", query: "oauth_token", engine: "github" },
-      { label: "GitHub JWT Tokens", query: "eyJhbGciOiJIUzI1NiJ9", engine: "github" },
-      { label: "GitHub DB Credentials", query: "DB_PASSWORD", engine: "github" },
-      { label: "GitHub SSH Keys", query: "ssh-rsa", engine: "github" }
+        // --- File Exposure & Sensitive Information (Google) ---
+        { category: "File Exposure (Google)", label: "Directory Listings", query: "intitle:index.of site:{TARGET_DOMAIN}", engine: "google", description: "Finds open directory listings." },
+        { category: "File Exposure (Google)", label: "Config Files", query: "site:{TARGET_DOMAIN} ext:xml | ext:conf | ext:cnf | ext:inf | ext:ini | ext:cfg | ext:env | ext:pem | ext:key | ext:json", engine: "google", description: "Exposed configuration or key files." },
+        { category: "File Exposure (Google)", label: "Database Dumps", query: "site:{TARGET_DOMAIN} ext:sql | ext:dbf | ext:mdb | ext:backup | ext:dump", engine: "google", description: "Potential database backups." },
+        { category: "File Exposure (Google)", label: "Log Files", query: "site:{TARGET_DOMAIN} ext:log | ext:logs", engine: "google", description: "Exposed log files containing sensitive data." },
+        { category: "File Exposure (Google)", label: "Backup Files", query: "site:{TARGET_DOMAIN} ext:bkf | ext:bkp | ext:bak | ext:old | ext:backup | ext:zip | ext:tar.gz | ext:rar | ext:7z", engine: "google", description: "Various backup file extensions." },
+        { category: "File Exposure (Google)", label: "Public Documents", query: "site:{TARGET_DOMAIN} ext:pdf | ext:docx | ext:xlsx | ext:pptx | ext:csv | ext:txt | ext:odt | ext:ods", engine: "google", description: "Publicly accessible documents." },
+        { category: "File Exposure (Google)", label: "Exposed .git Folders", query: "site:{TARGET_DOMAIN} inurl:/.git", engine: "google", description: "Finds exposed .git repositories. Check for .git/config." },
+        { category: "File Exposure (Google)", label: "Exposed .svn Folders", query: "site:{TARGET_DOMAIN} inurl:/.svn/entries", engine: "google", description: "Finds exposed .svn repositories." },
+        { category: "File Exposure (Google)", label: "Exposed .DS_Store Files", query: "site:{TARGET_DOMAIN} inurl:.DS_Store \"Spotlight\"", engine: "google", description: "macOS .DS_Store files potentially listing folder contents." },
+        { category: "File Exposure (Google)", label: "JKS Keystores", query: "site:{TARGET_DOMAIN} ext:jks intext:keytool OR intext:keystore", engine: "google", description: "Java KeyStores, may contain private keys." },
+        { category: "File Exposure (Google)", label: "Shell History", query: "site:{TARGET_DOMAIN} ext:sh_history | ext:bash_history | ext:zsh_history", engine: "google", description: "Exposed shell command history files." },
+
+
+        // --- Sensitive Information & Credentials (Google) ---
+        { category: "Sensitive Info & Credentials (Google)", label: "Login Pages", query: "site:{TARGET_DOMAIN} inurl:login | inurl:signin | intitle:Login | intitle:Sign-in | inurl:auth", engine: "google", description: "Finds login portals and authentication pages." },
+        { category: "Sensitive Info & Credentials (Google)", label: "SQL Errors", query: "site:{TARGET_DOMAIN} intext:\"sql syntax near\" | intext:\"syntax error has occurred\" | intext:\"incorrect syntax near\" | intext:\"ORA-[0-9][0-9][0-9][0-9]\" | intext:\"unclosed quotation mark\"", engine: "google", description: "Reveals SQL error messages indicating potential SQLi." },
+        { category: "Sensitive Info & Credentials (Google)", label: "PHP Info", query: "site:{TARGET_DOMAIN} intitle:phpinfo \"published by the PHP Group\"", engine: "google", description: "Exposed phpinfo() pages with server configuration details." },
+        { category: "Sensitive Info & Credentials (Google)", label: "Apache Struts RCE", query: "site:{TARGET_DOMAIN} ext:action | ext:struts | ext:do", engine: "google", description: "Potential Apache Struts endpoints, check for CVEs." },
+        { category: "Sensitive Info & Credentials (Google)", label: "Error Messages / Debug Info", query: "site:{TARGET_DOMAIN} \"PHP Fatal error\" | \"Java Exception\" | \"DEBUG\" True | \"Traceback (most recent call last)\"", engine: "google", description: "Pages with debug/error messages." },
+        { category: "Sensitive Info & Credentials (Google)", label: "API Keys in URLs", query: "site:{TARGET_DOMAIN} inurl:api_key= | inurl:apikey= | inurl:access_token= | inurl:auth_token=", engine: "google", description: "Potential API keys exposed in URLs." },
+        { category: "Sensitive Info & Credentials (Google)", label: "Admin Panels", query: "site:{TARGET_DOMAIN} inurl:admin | inurl:administrator | intitle:Admin | intitle:Dashboard | inurl:cpanel | inurl:webadmin", engine: "google", description: "Finds admin login pages or dashboards." },
+        { category: "Sensitive Info & Credentials (Google)", label: "Environment Variables", query: "site:{TARGET_DOMAIN} (inurl:.env OR intitle:index.of .env OR ext:env) -github.com", engine: "google", description: "Exposed .env files outside of GitHub." },
+        { category: "Sensitive Info & Credentials (Google)", label: "SSH Private Keys", query: "site:{TARGET_DOMAIN} (ext:key OR ext:pem OR ext:ppk) (\"BEGIN RSA PRIVATE KEY\" OR \"PuTTY-User-Key-File-2\")", engine: "google", description: "Exposed SSH private keys." },
+        { category: "Sensitive Info & Credentials (Google)", label: "Secrets in Code (General)", query: "site:{TARGET_DOMAIN} intext:password | intext:secret | intext:token filetype:js | filetype:yml | filetype:config | filetype:json", engine: "google", description: "Generic search for secrets in code files." },
+
+        // --- CVEs & Specific Vulnerabilities (Google) ---
+        { category: "CVEs & Vulnerabilities (Google)", label: "Jenkins Unprotected", query: "site:{TARGET_DOMAIN} intitle:\"Dashboard [Jenkins]\" -inurl:login", engine: "google", description: "Unprotected Jenkins dashboards." },
+        { category: "CVEs & Vulnerabilities (Google)", label: "Jira Unprotected Filters/Dashboards", query: "site:{TARGET_DOMAIN} inurl:/issues/ | inurl:/browse/ | inurl:/Dashboard.jspa | inurl:ManageFilters.jspa?filterView=popular (-inurl:login.jspa)", engine: "google", description: "Public Jira issues or dashboards." },
+        { category: "CVEs & Vulnerabilities (Google)", label: "GitLab Public", query: "site:{TARGET_DOMAIN} (inurl:explore OR inurl:public) (inurl:projects OR inurl:groups)", engine: "google", description: "Publicly browseable GitLab projects or groups." },
+        { category: "CVEs & Vulnerabilities (Google)", label: "Grafana Dashboards", query: "site:{TARGET_DOMAIN} intitle:Grafana inurl:dashboard", engine: "google", description: "Exposed Grafana dashboards (check for unauth access)." },
+        { category: "CVEs & Vulnerabilities (Google)", label: "Wordpress Debug Log", query: "site:{TARGET_DOMAIN} inurl:wp-content/debug.log", engine: "google", description: "Exposed WordPress debug logs." },
+        { category: "CVEs & Vulnerabilities (Google)", label: "Magento Config", query: "site:{TARGET_DOMAIN} inurl:/app/etc/local.xml", engine: "google", description: "Magento local.xml file, contains DB credentials." },
+        { category: "CVEs & Vulnerabilities (Google)", label: "phpMyAdmin Setup", query: "site:{TARGET_DOMAIN} inurl:/phpmyadmin/setup/index.php", engine: "google", description: "Exposed phpMyAdmin setup page." },
+        { category: "CVEs & Vulnerabilities (Google)", label: "Laravel Telescope", query: "site:{TARGET_DOMAIN} inurl:/telescope", engine: "google", description: "Exposed Laravel Telescope debug dashboard." },
+
+        // --- Cloud Services (Google) ---
+        { category: "Cloud Services (Google)", label: "S3 Buckets", query: "site:s3.amazonaws.com {TARGET_KEYWORD} | site:storage.googleapis.com {TARGET_KEYWORD} | site:*.blob.core.windows.net {TARGET_KEYWORD}", engine: "google", description: "Search for public S3, GCS buckets, Azure blobs." },
+        { category: "Cloud Services (Google)", label: "DigitalOcean Spaces", query: "site:*.digitaloceanspaces.com {TARGET_KEYWORD}", engine: "google", description: "Public DigitalOcean Spaces." },
+        { category: "Cloud Services (Google)", label: "Firebase DBs", query: "site:*.firebaseio.com {TARGET_KEYWORD} -docs -support -examples", engine: "google", description: "Public Firebase databases." },
+        { category: "Cloud Services (Google)", label: "Elasticsearch Kibana", query: "site:{TARGET_DOMAIN} inurl:_plugin/kibana OR intitle:Kibana OR app/kibana", engine: "google", description: "Exposed Kibana instances." },
+        { category: "Cloud Services (Google)", label: "Exposed GCP Buckets via domain", query: "site:storage.googleapis.com intitle:{TARGET_DOMAIN} | intitle:{TARGET_KEYWORD}", engine: "google", description: "Find GCP buckets by target name in title." },
+
+        // --- Subdomain & Recon (Google) ---
+        { category: "Subdomain & Recon (Google)", label: "Subdomain Enumeration", query: "site:*.{TARGET_DOMAIN} -site:www.{TARGET_DOMAIN}", engine: "google", description: "Finds subdomains of the target." },
+        { category: "Subdomain & Recon (Google)", label: "Pastebin Leaks", query: "site:pastebin.com {TARGET_KEYWORD} | {TARGET_DOMAIN}", engine: "google", description: "Leaks related to target on Pastebin." },
+        { category: "Subdomain & Recon (Google)", label: "Trello Boards", query: "site:trello.com {TARGET_KEYWORD} | {TARGET_DOMAIN}", engine: "google", description: "Public Trello boards related to target." },
+        { category: "Subdomain & Recon (Google)", label: "Public API Docs", query: "site:{TARGET_DOMAIN} inurl:api | inurl:developer | intitle:\"API Documentation\" | \"Swagger UI\"", engine: "google", description: "Find API documentation pages or Swagger UIs." },
+        { category: "Subdomain & Recon (Google)", label: "Censys Search", query: "site:search.censys.io {TARGET_KEYWORD} | {TARGET_DOMAIN}", engine: "google", description: "Find target info on Censys." },
+        { category: "Subdomain & Recon (Google)", label: "Shodan Search", query: "site:shodan.io {TARGET_KEYWORD} | {TARGET_DOMAIN}", engine: "google", description: "Find target info on Shodan." },
+        { category: "Subdomain & Recon (Google)", label: "Public Google Docs/Sheets", query: "site:docs.google.com/document/ {TARGET_KEYWORD} | site:docs.google.com/spreadsheets/ {TARGET_KEYWORD}", engine: "google", description: "Publicly shared Google Docs or Sheets." },
+
+        // --- GitHub Specific Dorks ---
+        { category: "GitHub Specific", label: "Org/Repo: .env Files", query: "org:{TARGET_KEYWORD} filename:.env", engine: "github", description: "Find .env files in a GitHub org or repo." },
+        { category: "GitHub Specific", label: "Org/Repo: AWS Keys", query: "org:{TARGET_KEYWORD} AWS_ACCESS_KEY_ID", engine: "github", description: "AWS access keys." },
+        { category: "GitHub Specific", label: "Org/Repo: GCP Keys", query: "org:{TARGET_KEYWORD} gcloud auth activate-service-account OR AIza[0-9A-Za-z-_]{35}", engine: "github", description: "GCP service account keys or API keys." },
+        { category: "GitHub Specific", label: "Org/Repo: Private Keys", query: "org:{TARGET_KEYWORD} \"-----BEGIN RSA PRIVATE KEY-----\" OR \"-----BEGIN OPENSSH PRIVATE KEY-----\"", engine: "github", description: "RSA or OpenSSH private keys." },
+        { category: "GitHub Specific", label: "Org/Repo: Heroku API Keys", query: "org:{TARGET_KEYWORD} (heroku AND api_key) OR [0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}", engine: "github", description: "Heroku API keys (UUID format)." },
+        { category: "GitHub Specific", label: "Org/Repo: Stripe API Keys", query: "org:{TARGET_KEYWORD} (sk_live_ OR rk_live_)[0-9a-zA-Z]{24}", engine: "github", description: "Stripe API keys." },
+        { category: "GitHub Specific", label: "Org/Repo: Slack Tokens", query: "org:{TARGET_KEYWORD} xoxp- OR xoxb- OR xapp- OR xoxa-", engine: "github", description: "Slack tokens (bot, user, app)." },
+        { category: "GitHub Specific", label: "Org/Repo: Twilio SID & Token", query: "org:{TARGET_KEYWORD} TWILIO_ACCOUNT_SID AND TWILIO_AUTH_TOKEN", engine: "github", description: "Twilio credentials." },
+        { category: "GitHub Specific", label: "Org/Repo: Generic OAuth Tokens", query: "org:{TARGET_KEYWORD} oauth_token OR access_token", engine: "github", description: "Generic OAuth/Access tokens." },
+        { category: "GitHub Specific", label: "Org/Repo: JWT Tokens", query: "org:{TARGET_KEYWORD} eyJhbGciOiJIUzI1NiJ9 OR eyJhbGciOiJSUzI1NiJ9", engine: "github", description: "Potential JWTs (HS256 or RS256)." },
+        { category: "GitHub Specific", label: "Org/Repo: DB Credentials", query: "org:{TARGET_KEYWORD} DB_PASSWORD OR DATABASE_URL password OR connectionString", engine: "github", description: "Database connection strings or passwords." },
+        { category: "GitHub Specific", label: "Org/Repo: SSH Keys Files", query: "org:{TARGET_KEYWORD} filename:id_rsa or filename:id_dsa or filename:authorized_keys", engine: "github", description: "SSH private key files or authorized_keys." },
+        { category: "GitHub Specific", label: "Org/Repo: Config Files with Passwords", query: "org:{TARGET_KEYWORD} (filename:config.json OR filename:settings.py OR filename:credentials.yml) (password OR secret)", engine: "github", description: "Config files potentially containing passwords." },
+        { category: "GitHub Specific", label: "Org/Repo: Docker Compose Secrets", query: "org:{TARGET_KEYWORD} filename:docker-compose.yml (password OR secret OR api_key)", engine: "github", description: "Secrets in docker-compose files." },
+        { category: "GitHub Specific", label: "Org/Repo: Kubernetes Secrets", query: "org:{TARGET_KEYWORD} (kind:Secret AND apiVersion:v1 data:) OR filename:secrets.yaml", engine: "github", description: "Kubernetes secret definitions." },
+        { category: "GitHub Specific", label: "Global: Specific API Key Pattern", query: "\"{TARGET_KEYWORD}\" (api_key OR apikey OR secret_key)", engine: "github", description: "Search globally for a specific type of API key string." },
+        { category: "GitHub Specific", label: "Global: Hardcoded Passwords", query: "\"{TARGET_KEYWORD}\" (password OR PWD OR pass) (-test -example)", engine: "github", description: "Search globally for a keyword associated with a password, excluding test/example." },
+
+        // --- Attack Vectors (Google) ---
+        { category: "Attack Vectors (Google)", label: "LFI Payloads", query: "site:{TARGET_DOMAIN} inurl:?file= | inurl:?page= | inurl:?path= | inurl:?document=", engine: "google", description: "Potential Local File Inclusion parameters." },
+        { category: "Attack Vectors (Google)", label: "RFI Payloads", query: "site:{TARGET_DOMAIN} inurl:?include=http | inurl:?load=http | inurl:?resource=http", engine: "google", description: "Potential Remote File Inclusion parameters." },
+        { category: "Attack Vectors (Google)", label: "XSS Payloads", query: "site:{TARGET_DOMAIN} inurl:?q= | inurl:?s= | inurl:?search= | inurl:?query= | inurl:?keyword=", engine: "google", description: "Common XSS reflection parameters." },
+        { category: "Attack Vectors (Google)", label: "Open Redirects", query: "site:{TARGET_DOMAIN} inurl:redirect= | inurl:url= | inurl:goto= | inurl:next= | inurl:returnTo= | inurl:ReturnUrl=", engine: "google", description: "Potential open redirect parameters." },
+        { category: "Attack Vectors (Google)", label: "SSRF Parameters", query: "site:{TARGET_DOMAIN} inurl:?url= | inurl:?dest= | inurl:?proxy= | inurl:?feed= | inurl:?path=http | inurl:?file=http", engine: "google", description: "Common SSRF parameters in URLs." },
+        { category: "Attack Vectors (Google)", label: "GraphQL Endpoints", query: "site:{TARGET_DOMAIN} inurl:/graphql | inurl:/graphiql | intitle:GraphQL", engine: "google", description: "Discover GraphQL endpoints." },
     ];
 
-    function initButtons() {
-      const container = document.querySelector('.row');
-      const target = document.getElementById('target');
-      container.innerHTML = '';
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        const categoriesContainer = document.getElementById('dork-categories-container');
+        const targetInput = document.getElementById('target');
+        const copyToastEl = document.getElementById('copyToast');
+        const copyToast = new bootstrap.Toast(copyToastEl);
 
-      dorks.forEach(dork => {
-        const col = document.createElement('div');
-        col.className = 'col-6 col-md-4 col-lg-3 mb-2';
-        const btn = document.createElement('button');
-        btn.className = 'btn btn-dark w-100 dork-btn';
-        btn.textContent = dork.label;
-        btn.onclick = () => {
-          const t = target.value.trim();
-          if (!t) return alert('Please enter a target or org.');
+        const dorksByCategory = dorks.reduce((acc, dork) => {
+            if (!acc[dork.category]) acc[dork.category] = [];
+            acc[dork.category].push(dork);
+            return acc;
+        }, {});
 
-          if (dork.engine === 'github') {
-            // GitHub code search
-            const q = encodeURIComponent(`${t} ${dork.query}`);
-            window.open(`https://github.com/search?type=Code&q=${q}`, '_blank');
-          } else {
-            // Google search
-            const q = encodeURIComponent(`site:${t} ${dork.query}`);
-            window.open(`https://www.google.com/search?q=${q}`, '_blank');
-          }
-        };
-        col.appendChild(btn);
-        container.appendChild(col);
-      });
-    }
+        for (const categoryName in dorksByCategory) {
+            const categorySection = document.createElement('section');
+            categorySection.className = 'dork-category';
 
-    document.addEventListener('DOMContentLoaded', initButtons);
-  </script>
+            const categoryTitle = document.createElement('h3');
+            categoryTitle.innerHTML = `<i class="fas fa-folder-open me-2"></i>${categoryName}`;
+            categorySection.appendChild(categoryTitle);
+
+            const row = document.createElement('div');
+            row.className = 'row g-3'; // g-3 for gutter
+
+            dorksByCategory[categoryName].forEach(dork => {
+                const col = document.createElement('div');
+                col.className = 'col-12 col-sm-6 col-md-4 col-lg-3 d-flex'; // d-flex for equal height cards
+
+                const dorkItem = document.createElement('div');
+                dorkItem.className = 'dork-item w-100';
+
+                const label = document.createElement('div');
+                label.className = 'dork-label';
+                label.textContent = dork.label;
+                dorkItem.appendChild(label);
+
+                const engineIconSpan = document.createElement('span');
+                engineIconSpan.className = 'engine-icon';
+                engineIconSpan.innerHTML = dork.engine === 'github' ? '<i class="fab fa-github"></i> GitHub' : '<i class="fab fa-google"></i> Google';
+                dorkItem.appendChild(engineIconSpan);
+
+                if (dork.description) {
+                    const desc = document.createElement('p');
+                    desc.className = 'dork-description';
+                    desc.textContent = dork.description;
+                    dorkItem.appendChild(desc);
+                }
+
+
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = 'dork-actions mt-auto d-flex justify-content-between align-items-center'; // mt-auto pushes to bottom
+
+                const openBtn = document.createElement('button');
+                openBtn.className = 'btn btn-sm btn-open-dork';
+                openBtn.innerHTML = '<i class="fas fa-external-link-alt me-1"></i> Open';
+                openBtn.setAttribute('type', 'button');
+                openBtn.title = `Open dork in ${dork.engine}`;
+
+                openBtn.onclick = () => {
+                    const targetValue = targetInput.value.trim();
+                    if (!targetValue && (dork.query.includes("{TARGET_DOMAIN}") || dork.query.includes("{TARGET_KEYWORD}"))) {
+                        alert('Please enter a target domain, keyword, or GitHub org/repo.');
+                        targetInput.focus();
+                        return;
+                    }
+
+                    let finalQuery = dork.query.replace(/{TARGET_DOMAIN}/g, targetValue).replace(/{TARGET_KEYWORD}/g, targetValue);
+                    let searchUrl;
+
+                    if (dork.engine === 'github') {
+                        const encodedQuery = encodeURIComponent(finalQuery);
+                        searchUrl = `https://github.com/search?type=Code&q=${encodedQuery}`;
+                    } else {
+                        const encodedQuery = encodeURIComponent(finalQuery);
+                        searchUrl = `https://www.google.com/search?q=${encodedQuery}`;
+                    }
+                    const newWindow = window.open(searchUrl, '_blank');
+                    if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+                        // Pop-up Blocker or other issue
+                        alert(`Could not open the search window directly. This might be due to a pop-up blocker or browser security settings for ${dork.engine}. Please use the "Copy Dork" button and paste it manually.`);
+                    }
+                };
+
+                const copyBtn = document.createElement('button');
+                copyBtn.className = 'btn btn-sm btn-copy-dork';
+                copyBtn.innerHTML = '<i class="fas fa-copy me-1"></i> Copy';
+                copyBtn.setAttribute('type', 'button');
+                copyBtn.title = 'Copy dork query to clipboard';
+
+                copyBtn.onclick = (event) => {
+                    event.stopPropagation();
+                    const targetValue = targetInput.value.trim();
+                    if (!targetValue && (dork.query.includes("{TARGET_DOMAIN}") || dork.query.includes("{TARGET_KEYWORD}"))) {
+                        alert('Please enter a target to formulate the dork query for copying.');
+                        targetInput.focus();
+                        return;
+                    }
+
+                    let finalQueryToCopy = dork.query.replace(/{TARGET_DOMAIN}/g, targetValue).replace(/{TARGET_KEYWORD}/g, targetValue);
+
+                    navigator.clipboard.writeText(finalQueryToCopy)
+                        .then(() => copyToast.show())
+                        .catch(err => {
+                            console.error('Failed to copy dork: ', err);
+                            alert('Failed to copy dork. See console for details.');
+                        });
+                };
+
+                actionsDiv.appendChild(openBtn);
+                actionsDiv.appendChild(copyBtn);
+                dorkItem.appendChild(actionsDiv);
+
+                if (dork.engine === 'google') {
+                    const note = document.createElement('p');
+                    note.className = 'google-dork-note mb-0';
+                    note.innerHTML = 'If "Open" is blocked, use "Copy".';
+                    dorkItem.appendChild(note);
+                }
+
+
+                col.appendChild(dorkItem);
+                row.appendChild(col);
+            });
+            categorySection.appendChild(row);
+            categoriesContainer.appendChild(categorySection);
+        }
+    });
+    </script>
 </body>
 </html>
