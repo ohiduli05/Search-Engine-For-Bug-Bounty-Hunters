@@ -1,485 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Engine</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <style>
-         .fsbutton {
-        padding: 12px 24px;
-        font-size: 16px;
-        background-color: black;
-        border: 2px solid #ffffff;
-        color: #ffffff;
-        transition: all 0.3s ease;
-        margin: 20px 12px;
-        width: 95%;
-    }
-    .fsbutton:hover {
-        background-color: red;
-        color: #000000;
-        border-color: #000000;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    }
-    input{
-        display: flex;
-        text-align: center;
-        margin-left: 25%;
-        margin-right: 25%;
-        width: 50%;
-        height: 40px;
-    }
-  
-    </style>
-    <!-- Java File -->
-    <script>
-        function googleSearch(type) {
-            var targetDomain = document.getElementById('target').value;
-    
-            if (!targetDomain) {
-                alert('Please enter a target domain.');
-                return;
-            }
-    
-            var searchQuery = 'site:' + targetDomain;
-    
-            switch (type) {
-                case 1:
-                    searchQuery += ' intitle:index.of';
-                    break;
-                case 2:
-                    searchQuery += ' ext:xml | ext:conf | ext:cnf | ext:reg | ext:inf | ext:rdp | ext:cfg | ext:txt | ext:ora | ext:ini';
-                    break;
-                case 3:
-                    searchQuery += ' ext:sql | ext:dbf | ext:mdb';
-                    break;
-                case 4:
-                    searchQuery += ' ext:log';
-                    break;
-                case 5:
-                    searchQuery += ' ext:bkf | ext:bkp | ext:bak | ext:old | ext:backup';
-                    break;
-                case 6:
-                    searchQuery += ' inurl:login';
-                    break;
-                case 7:
-                    searchQuery += ' intext:"sql syntax near" | intext:"syntax error has occurred" | intext:"incorrect syntax near" | intext:"unexpected end of SQL command" | intext:"Warning: mysql_connect()" | intext:"Warning: mysql_query()" | intext:"Warning: pg_connect()"';
-                    break;
-                case 8:
-                    searchQuery += ' ext:doc | ext:docx | ext:odt | ext:pdf | ext:rtf | ext:sxw | ext:psw | ext:ppt | ext:pptx | ext:pps | ext:csv';
-                    break;
-                case 9:
-                    searchQuery += ' ext:php intitle:phpinfo "published by the PHP Group"';
-                    break;
-                case 10:
-                    searchQuery += ' inurl:wp- | inurl:wp-content | inurl:plugins | inurl:uploads | inurl:themes | inurl:download';
-                    break;
-                case 11:
-                    searchQuery += ' inurl:shell | inurl:backdoor | inurl:wso | inurl:cmd | shadow | passwd | boot.ini | inurl:backdoor';
-                    break;
-                case 12:
-                    searchQuery += ' inurl:readme | inurl:license | inurl:install | inurl:setup | inurl:config';
-                    break;
-                case 13:
-                    searchQuery += ' inurl:redir | inurl:url | inurl:redirect | inurl:return | inurl:src=http | inurl:r=http';
-                    break;
-                case 14:
-                    searchQuery += ' ext:action | ext:struts | ext:do';
-                    break;
-                case 15:
-                    var site = 'site:pastebin.com ' + targetDomain;
-                    var url = 'https://www.google.com/search?q=' + encodeURIComponent(site);
-                    window.open(url, '_blank');
-                    return;
-                case 16:
-                    var site = 'site:linkedin.com employees ' + targetDomain;
-                    var url = 'https://www.google.com/search?q=' + encodeURIComponent(site);
-                    window.open(url, '_blank');
-                    return;
-                case 17:
-                    var site = 'inurl:"/phpinfo.php" | inurl:".htaccess" | inurl:"/.git" ' + targetDomain + ' -github';
-                    var url = 'https://www.google.com/search?q=' + encodeURIComponent(site);
-                    window.open(url, '_blank');
-                    return;
-                case 18:
-                    var site = 'site:*.' + targetDomain;
-                    var url = 'https://www.google.com/search?q=' + encodeURIComponent(site);
-                    window.open(url, '_blank');
-                    return;
-                case 19:
-                    var site = 'site:*.*.' + targetDomain;
-                    var url = 'https://www.google.com/search?q=' + encodeURIComponent(site);
-                    window.open(url, '_blank');
-                    return;
-                case 20:
-                    var site = 'inurl:wp-content | inurl:wp-includes ' + targetDomain;
-                    var url = 'https://www.google.com/search?q=' + encodeURIComponent(site);
-                    window.open(url, '_blank');
-                    return;
-                case 21:
-                    var site = '"*.' + targetDomain + '"';
-                    var url = 'https://github.com/search?q=' + encodeURIComponent(site) + '&type=host';
-                    window.open(url, '_blank');
-                    return;
-                case 22:
-                    var url = 'http://' + targetDomain + '/crossdomain.xml';
-                    window.open(url, '_blank');
-                    return;
-                case 23:
-                    var url = 'http://threatcrowd.org/domain.php?domain=' + targetDomain;
-                    window.open(url, '_blank');
-                    return;
-                case 24:
-                    var site = '+inurl:' + targetDomain + ' +ext:swf';
-                    var url = 'https://www.google.com/search?q=' + encodeURIComponent(site);
-                    window.open(url, '_blank');
-                    return;
-                case 25:
-                    var site = 'site:' + targetDomain + ' mime:swf';
-                    var url = 'https://yandex.com/search/?text=' + encodeURIComponent(site);
-                    window.open(url, '_blank');
-                    return;
-                case 26:
-                    var site = targetDomain;
-                    var url = 'https://web.archive.org/cdx/search?url=' + encodeURIComponent(site) + '/&matchType=domain&collapse=urlkey&output=text&fl=original&filter=urlkey:.*swf&limit=100000&_=1507209148310';
-                    window.open(url, '_blank');
-                    return;
-                case 27:
-                    var site = targetDomain;
-                    var url = 'https://web.archive.org/cdx/search?url=' + encodeURIComponent(site) + '/&matchType=domain&collapse=urlkey&output=text&fl=original&filter=mimetype:application/x-shockwave-flash&limit=100000&_=1507209148310';
-                    window.open(url, '_blank');
-                    return;
-                case 28:
-                    var site = '.' + targetDomain;
-                    var url = 'https://web.archive.org/web/*/(.' + encodeURIComponent(site) + ')';
-                    window.open(url, '_blank');
-                    return;
-                case 29:
-                    var site = targetDomain;
-                    var url = 'https://web.archive.org/web/*/' + encodeURIComponent(site) + '/*';
-                    window.open(url, '_blank');
-                    return;
-                case 30:
-                    var url = 'https://crt.sh/?q=%25.' + targetDomain;
-                    window.open(url, '_blank');
-                    return;
-                case 31:
-                    var site = targetDomain;
-                    var url = 'https://www.openbugbounty.org/search/?search=' + encodeURIComponent(site) + '&type=host';
-                    window.open(url, '_blank');
-                    return;
-                case 32:
-                    var site = targetDomain;
-                    var url = 'https://www.reddit.com/search/?q=' + encodeURIComponent(site) + '&source=recent';
-                    window.open(url, '_blank');
-                    return;
-                case 33:
-                    var site = '+inurl:' + targetDomain + ' +ext:wp- | +inurl:' + targetDomain + ' +ext:wp-content';
-                    var url = 'http://wwwb-dedup.us.archive.org:8083/cdx/search?url=' + encodeURIComponent(site) + '/&matchType=domain&collapse=digest&output=text&fl=original,timestamp&filter=urlkey:.*wp[-].*&limit=1000000&xx=';
-                    window.open(url, '_blank');
-                    return;
-                case 34:
-                    var url = 'https://censys.io/ipv4?q=' + targetDomain;
-                    window.open(url, '_blank');
-                    return;
-                case 35:
-                    var url = 'https://censys.io/domain?q=' + targetDomain;
-                    window.open(url, '_blank');
-                    return;
-                case 36:
-                    var url = 'https://censys.io/certificates?q=' + targetDomain;
-                    window.open(url, '_blank');
-                    return;
-                case 37:
-                    var url = 'https://www.shodan.io/search?query=' + targetDomain;
-                    window.open(url, '_blank');
-                    return;
-                case 38:
-                    searchQuery += ' inurl:"/geoserver/ows?service=wfs"';
-                    break;
-                case 39:
-                    searchQuery += ' intext:"ArcGIS REST Services Directory" intitle:"Folder: /"';
-                    break;
-                case 40:
-                    searchQuery += ' inurl:/wp-content/uploads/wpo_wcpdf';
-                    break;
-                case 41:
-                    searchQuery += ' intitle:"index of "main.yml"';
-                    break;
-                case 42:
-                    searchQuery += ' inurl:/admin.aspx'
-                    break
-                case 43:
-                    searchQuery += ' inurl:/wp-content/uploads/wpo_wcpdf'
-                    break
-                case 44:
-                    searchQuery += ' inurl:uploadimage.php'
-                    break
-                case 45:
-                    searchQuery += ' inurl:*/wp-content/plugins/contact-form-7/'
-                    break
-                case 46:
-                    searchQuery += ' intitle:index.of conf.php'
-                    break
-                case 47:
-                    searchQuery += ' intitle:"Sharing API Info"'
-                    break
-                case 48:
-                    searchQuery += ' intitle:"Index of" inurl:/backup/ "admin.zip"'
-                    break
-                case 49:
-                    searchQuery += ' intitle:"index of" github-api'
-                    break
-                case 50:
-                    searchQuery += ' inurl:wp-content/uploads/wcpa_uploads'
-                    break
-                case 51:
-                    searchQuery += ' inurl:user intitle:"Drupal" intext:"Log in" -"powered by"'
-                    break
-                case 52:
-                    searchQuery += ' inurl: /libraries/joomla/database/'
-                    break
-                case 53:
-                    searchQuery += ' inurl:"php?sql=select" ext:php'
-                    break
-                case 54:
-                    searchQuery += ' inurl:"wp-content" intitle:"index.of" intext:wp-config.php'
-                    break
-                case 55 :
-                    searchQuery += ' intext:"index of" inurl:json-rpc'
-                    break
-                case 56 :
-                    searchQuery += ' intitle:"index of" "download.php?file="'
-                    break
-                case 57 :
-                    searchQuery += ' intext:"index of" inurl:jwks-rsa'
-                    break
-                case 58 :
-                    searchQuery += ' inurl:"wp-content" intitle:"index.of" intext:backup"'
-                    break
-                case 59 :
-                    searchQuery += ' intitle:index.of conf.mysql'
-                    break
-                case 60 :
-                    searchQuery += ' intitle:"index of" "users.yml" | "admin.yml" | "config.yml"'
-                    break
-                case 61 :
-                    searchQuery += ' php?id=';
-                    break
-                case 62 :
-                    searchQuery += ' intext:pom.xml intitle:"index of /"'
-                    break
-                case 63 :
-                    searchQuery += ' intext:"Index of" intext:"/etc"'
-                    break
-                case 64 :
-                    searchQuery += ' "sql" "parent" intitle:index.of -injection'
-                    break
-                case 65:
-                    searchQuery += ' inurl:admin | administrator | adm | login | l0gin | wp-login
-                case 66 :
-                    searchQuery += ' add new
-                    break
-                case 67 :
-                    searchQuery += ' add new
-                    break
-                case 68:
-                    searchQuery += ' add new
-                default:
-                    alert('Invalid option.');
-                    return;
-            }
-    
-            var url = 'https://www.google.com/search?q=' + encodeURIComponent(searchQuery);
-            window.open(url, '_blank');
-        }
-        </script>
-    <!-- java end -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bug Bounty Dorking Engine</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+    crossorigin="anonymous"
+  />
+  <style>
+    body { background: #f8f9fa; }
+    .header { background: linear-gradient(90deg, #343a40, #6c757d); color: #fff; }
+    .dork-btn { transition: transform 0.2s, box-shadow 0.2s; }
+    .dork-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 15px rgba(0,0,0,0.2); }
+    #target { max-width: 400px; }
+  </style>
 </head>
 <body>
-   <div class="container">
-    <h2 class="text-center m-3 bg-danger text-white p-3">Search Engine For Bug Bounty Hunters</h2>
-    <h3 class="text-center"for="target">Enter Target Domain:</h3>
-   <div class="row">
-    <div class="col-4"></div>
-    <div class="col-4">
-        <input type="text" id="target">
-    </div>
-    <div class="col-4"></div>
-   </div>
-    <div class="row">
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(1)">Directory listing vulnerabilities</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(2)">Exposed Configuration files</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(3)">Exposed Database files</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(3)">Exposed Database files</button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(5)">Backup and old files</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(6)">Login pages</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(7)">SQL errors</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(8)">Publicly exposed documents</button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(9)">phpinfo()</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(10)">Find WordPress</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(11)">Finding Backdoors</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(12)">Install / Setup files</button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(17)">.htaccess sensitive files</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(18)">Find Subdomains</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(19)">Find Sub-Subdomains</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(21)">Search in GITHUB</button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(22)">Test CrossDomain</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(28)">Search in Web Archive #1</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(29)">Search in Web Archive #2</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(31)">Search OpenBugBounty</button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(33)">Search WP Config Backup</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(34)">Search in Censys (IPv4)</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(35)">Search in Censys (Domain)</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(37)">Search in SHODAN</button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(41)">main.yml file</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(42)">Admin Portal</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(43)">Wordpress Juicy file 1</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(44)">File Upload</button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(45)">Vulnerable Wordpress Plugin</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(42)">Admin Portal</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(46)">Sensitive File</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(47)">Sharing API Info</button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(48)">Sensitive Admin Backup</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(49)">Github API</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(52)">Joomla Database/</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(53)">Sql File</button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(56)">Sensitive File</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(58)">Wordpress Backup</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(59)">Mysql file</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(60)">Sensitive File</button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(61)">Sql Peamitter</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(62)">Sensitive File</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(63)">Sensitive File</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(64)">SQL databases</button>
-        </div>
-    </div>
-       <div class="row">
-             <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(65)">Admin</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(66)">Admin</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(67)">Admin</button>
-        </div>
-        <div class="col-md-3">
-            <button class="fsbutton" onclick="googleSearch(68)">Admin</button>
-        </div>
-     </div> 
-         <h4 class="text-center text-bg-success p-3">MD OHIDUL ISLAM</h4>
-   </div>
+  <header class="header py-4 text-center">
+    <h1 class="fw-bold">Bug Bounty Dorking Engine</h1>
+    <p class="lead">Streamlined Google & GitHub dorks for recon and vuln discovery</p>
+  </header>
 
+  <main class="container my-5">
+    <div class="d-flex justify-content-center mb-4">
+      <input
+        type="text"
+        id="target"
+        class="form-control text-center"
+        placeholder="Enter target domain, keyword, or GitHub org..."
+      />
+    </div>
+    <div class="row g-3">
+      <!-- Buttons will be injected here -->
+    </div>
+  </main>
 
-    <script src="/js/bootstrap.min.js"></script>
+  <footer class="text-center py-3">
+    <small>&copy; 2025 MD Ohidul Islam · Bug Bounty Toolkit</small>
+  </footer>
+
+  <script>
+    // Define dork templates with engine: 'google' or 'github'
+    const dorks = [
+      // Google-based dorks
+      { label: "Directory Listing", query: "intitle:index.of", engine: "google" },
+      { label: "Exposed Config Files", query: "ext:conf | ext:ini | ext:cfg", engine: "google" },
+      { label: "Database Dumps", query: "ext:sql | ext:dbf | ext:mdb", engine: "google" },
+      { label: "Backup Files", query: "ext:bak | ext:old | ext:backup", engine: "google" },
+      { label: "Login Pages", query: "inurl:login", engine: "google" },
+      { label: "SQL Errors", query: "intext:'sql syntax near' | intext:'incorrect syntax near'", engine: "google" },
+      { label: "Public Docs", query: "ext:pdf | ext:docx | ext:csv", engine: "google" },
+      { label: "phpinfo()", query: "intitle:phpinfo \"published by the PHP Group\"", engine: "google" },
+      { label: "WordPress Paths", query: "inurl:wp-content | inurl:plugins", engine: "google" },
+      { label: "Exposed .git", query: "inurl:.git", engine: "google" },
+      { label: "AWS S3 Buckets", query: "site:s3.amazonaws.com", engine: "google" },
+      { label: "Elasticsearch", query: "intitle:'Index of' 'elasticsearch'", engine: "google" },
+      { label: "Test Credentials", query: "inurl:'env' | inurl:'.env'", engine: "google" },
+      { label: "Error Logs", query: "ext:log", engine: "google" },
+      { label: "SSRF Endpoints", query: "inurl:'/api?url=' | inurl:'redirect='", engine: "google" },
+      { label: "Admin Panels", query: "inurl:admin | inurl:administrator", engine: "google" },
+      { label: "Backup Configs", query: "intitle:index.of backup", engine: "google" },
+      { label: "Subdomain Enumeration", query: "site:*.TARGET", engine: "google" },
+      { label: "Pastebin Leaks", query: "site:pastebin.com TARGET", engine: "google" },
+      { label: "Censys Search", query: "site:censys.io TARGET", engine: "google" },
+      // Advanced vectors
+      { label: "Local File Inclusion (LFI)", query: "inurl:?id= | inurl:?file=", engine: "google" },
+      { label: "Remote File Inclusion (RFI)", query: "inurl:include.php?file=", engine: "google" },
+      { label: "Cross-Site Scripting (XSS)", query: "inurl:?search= | inurl:?q=", engine: "google" },
+      { label: "Open Redirect", query: "inurl:redirect= | inurl:returnurl=", engine: "google" },
+      { label: "Apache .htpasswd", query: "intitle:\"Index of /\" \".htpasswd\"", engine: "google" },
+      { label: ".svn Directory", query: "inurl:.svn/entries", engine: "google" },
+      { label: "Jenkins Instances", query: "inurl:jenkins/login", engine: "google" },
+      { label: "FTP Directories", query: "intitle:\"Index of ftp\"", engine: "google" },
+      { label: "Exposed wp-config.php", query: "ext:php wp-config", engine: "google" },
+      { label: "PHP Session Files", query: "ext:sess_", engine: "google" },
+      // GitHub-specific dorks
+      { label: "GitHub .env Files", query: ".env filename:.env", engine: "github" },
+      { label: "GitHub AWS Keys", query: "AWS_ACCESS_KEY_ID", engine: "github" },
+      { label: "GitHub Private Keys", query: "-----BEGIN PRIVATE KEY-----", engine: "github" },
+      { label: "GitHub Heroku API Keys", query: "heroku.*api_key", engine: "github" },
+      { label: "GitHub OAuth Tokens", query: "oauth_token", engine: "github" },
+      { label: "GitHub JWT Tokens", query: "eyJhbGciOiJIUzI1NiJ9", engine: "github" },
+      { label: "GitHub DB Credentials", query: "DB_PASSWORD", engine: "github" },
+      { label: "GitHub SSH Keys", query: "ssh-rsa", engine: "github" }
+    ];
+
+    function initButtons() {
+      const container = document.querySelector('.row');
+      const target = document.getElementById('target');
+      container.innerHTML = '';
+
+      dorks.forEach(dork => {
+        const col = document.createElement('div');
+        col.className = 'col-6 col-md-4 col-lg-3 mb-2';
+        const btn = document.createElement('button');
+        btn.className = 'btn btn-dark w-100 dork-btn';
+        btn.textContent = dork.label;
+        btn.onclick = () => {
+          const t = target.value.trim();
+          if (!t) return alert('Please enter a target or org.');
+
+          if (dork.engine === 'github') {
+            // GitHub code search
+            const q = encodeURIComponent(`${t} ${dork.query}`);
+            window.open(`https://github.com/search?type=Code&q=${q}`, '_blank');
+          } else {
+            // Google search
+            const q = encodeURIComponent(`site:${t} ${dork.query}`);
+            window.open(`https://www.google.com/search?q=${q}`, '_blank');
+          }
+        };
+        col.appendChild(btn);
+        container.appendChild(col);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', initButtons);
+  </script>
 </body>
 </html>
